@@ -47,6 +47,8 @@ function serveStatic (root, options) {
   // copy options object
   var opts = Object.create(options || null)
 
+  options.alias = options.alias || ''
+
   // fall-though
   var fallthrough = opts.fallthrough !== false
 
@@ -91,6 +93,9 @@ function serveStatic (root, options) {
     if (path === '/' && originalUrl.pathname.substr(-1) !== '/') {
       path = ''
     }
+    
+    // facilitate path sub-directory aliasing
+    path = path.replace(new RegExp('^/' + options.alias), '')
 
     // create send stream
     var stream = send(req, path, opts)
